@@ -3,7 +3,7 @@
 
 using Rulealize.Abstraction.Evaluation;
 
-namespace Rulealize.Abstraction.Nodes
+namespace Rulealize.Abstraction.Node
 {
     /// <summary>
     /// A node that writes to the state.

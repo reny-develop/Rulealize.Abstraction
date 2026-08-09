@@ -3,7 +3,7 @@
 
 using System.Globalization;
 
-namespace Rulealize.Abstraction.Values
+namespace Rulealize.Abstraction.Value
 {
     /// <summary>
     /// A value that can be produced or consumed by any plugin.

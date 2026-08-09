@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0.
 
 using System.Text.Json;
-using Rulealize.Abstraction.Values;
+using Rulealize.Abstraction.Value;
 
-namespace Rulealize.Abstraction.Nodes
+namespace Rulealize.Abstraction.Node
 {
     /// <summary>
     /// A node that describes the type of a state field.

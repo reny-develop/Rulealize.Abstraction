@@ -3,7 +3,7 @@
 
 using System.Collections;
 
-namespace Rulealize.Abstraction.Values
+namespace Rulealize.Abstraction.Value
 {
     /// <summary>
     /// An ordered, finite sequence of values.

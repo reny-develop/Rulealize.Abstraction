@@ -3,7 +3,7 @@
 
 using System.Collections.Immutable;
 using System.Text.Json;
-using Rulealize.Abstraction.Nodes;
+using Rulealize.Abstraction.Node;
 
 namespace Rulealize.Abstraction.Building
 {

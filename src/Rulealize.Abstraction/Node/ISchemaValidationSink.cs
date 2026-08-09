@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Reny
 // Licensed under the Apache License, Version 2.0.
 
-namespace Rulealize.Abstraction.Nodes
+namespace Rulealize.Abstraction.Node
 {
     /// <summary>
     /// Collects the ways a value fails to satisfy a schema.

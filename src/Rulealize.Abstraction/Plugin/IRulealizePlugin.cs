@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Reny
 // Licensed under the Apache License, Version 2.0.
 
-namespace Rulealize.Abstraction.Plugins
+namespace Rulealize.Abstraction.Plugin
 {
     /// <summary>
     /// The entry point the runtime looks for when it loads a plugin assembly.
@@ -15,7 +15,7 @@ namespace Rulealize.Abstraction.Plugins
     /// <para>
     /// A plugin references this package and nothing else of Rulealize's. It does not
     /// reference the runtime, and it does not reference other plugins — the values defined
-    /// in <c>Rulealize.Abstraction.Values</c> are the entire channel between them.
+    /// in <c>Rulealize.Abstraction.Value</c> are the entire channel between them.
     /// </para>
     /// <example>
     /// <code>

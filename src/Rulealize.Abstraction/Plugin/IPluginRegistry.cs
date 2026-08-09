@@ -3,7 +3,7 @@
 
 using Rulealize.Abstraction.Building;
 
-namespace Rulealize.Abstraction.Plugins
+namespace Rulealize.Abstraction.Plugin
 {
     /// <summary>
     /// Where a plugin declares what it provides.

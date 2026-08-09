@@ -3,7 +3,7 @@
 
 using Rulealize.Abstraction.Building;
 
-namespace Rulealize.Abstraction.Nodes
+namespace Rulealize.Abstraction.Node
 {
     /// <summary>
     /// Implemented by an expression node that denotes a state field rather than merely

@@ -2,7 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using Rulealize.Abstraction.Building;
-using Rulealize.Abstraction.Values;
+using Rulealize.Abstraction.Value;
 
 namespace Rulealize.Abstraction.Evaluation
 {

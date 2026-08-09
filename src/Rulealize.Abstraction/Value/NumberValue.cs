@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Reny
 // Licensed under the Apache License, Version 2.0.
 
-namespace Rulealize.Abstraction.Values
+namespace Rulealize.Abstraction.Value
 {
     /// <summary>
     /// A numeric value.

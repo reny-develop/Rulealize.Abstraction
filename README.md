@@ -198,11 +198,11 @@ a string that does not begin with a reserved character is an ordinary text value
 | Namespace | Contents |
 | --- | --- |
 | `Rulealize.Abstraction` | `SourcePath`, `RuleSetBuildException`, `RuleEvaluationException` |
-| `Rulealize.Abstraction.Values` | the value model |
-| `Rulealize.Abstraction.Nodes` | `ExpressionNode`, `EffectNode`, `SchemaNode`, `IStateLocation`, `ISchemaValidationSink` |
+| `Rulealize.Abstraction.Value` | the value model |
+| `Rulealize.Abstraction.Node` | `ExpressionNode`, `EffectNode`, `SchemaNode`, `IStateLocation`, `ISchemaValidationSink` |
 | `Rulealize.Abstraction.Building` | build contexts, scopes, resolved handles, factory delegates |
 | `Rulealize.Abstraction.Evaluation` | `IEvaluationContext`, `IStateDraft` |
-| `Rulealize.Abstraction.Plugins` | `IRulealizePlugin`, `PluginManifest`, `IPluginRegistry`, `ISugarExpander` |
+| `Rulealize.Abstraction.Plugin` | `IRulealizePlugin`, `PluginManifest`, `IPluginRegistry`, `ISugarExpander` |
 
 ## License
 

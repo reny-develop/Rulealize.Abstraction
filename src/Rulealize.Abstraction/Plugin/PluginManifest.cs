@@ -1,7 +1,7 @@
 // Copyright (c) 2026 Reny
 // Licensed under the Apache License, Version 2.0.
 
-namespace Rulealize.Abstraction.Plugins
+namespace Rulealize.Abstraction.Plugin
 {
     /// <summary>
     /// What a plugin declares about itself: who it is, and what part of the operation name

@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0.
 
 using Rulealize.Abstraction.Building;
-using Rulealize.Abstraction.Nodes;
+using Rulealize.Abstraction.Node;
 
-namespace Rulealize.Abstraction.Plugins
+namespace Rulealize.Abstraction.Plugin
 {
     /// <summary>
     /// Turns a string literal that begins with a plugin's reserved character into a node.

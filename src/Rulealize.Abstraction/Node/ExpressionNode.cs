@@ -2,9 +2,9 @@
 // Licensed under the Apache License, Version 2.0.
 
 using Rulealize.Abstraction.Evaluation;
-using Rulealize.Abstraction.Values;
+using Rulealize.Abstraction.Value;
 
-namespace Rulealize.Abstraction.Nodes
+namespace Rulealize.Abstraction.Node
 {
     /// <summary>
     /// A node that produces a value.
