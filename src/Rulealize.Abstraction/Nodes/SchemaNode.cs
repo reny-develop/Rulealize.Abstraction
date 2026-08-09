@@ -53,5 +53,29 @@ namespace Rulealize.Abstraction.Nodes
         /// <param name="writer">The writer, positioned to accept a single value.</param>
         /// <param name="value">The value to write. Satisfies this schema.</param>
         public abstract void WriteJson(Utf8JsonWriter writer, RuleValue value);
+
+        /// <summary>Settles a value into the form this schema keeps it in.</summary>
+        /// <param name="value">The value an effect wrote.</param>
+        /// <returns>The value to store. The default keeps it as it is.</returns>
+        /// <remarks>
+        /// <para>
+        /// Called once per field when a transition commits, before the new state is anything
+        /// anyone can see. A schema node already owns how its values are written and read;
+        /// this is the same authority over how they are held between the two.
+        /// </para>
+        /// <para>
+        /// Most schemas have nothing to do here. The one that does is a list, because the
+        /// value model allows a sequence to be lazy and an expression is free to produce one
+        /// that recomputes itself from the state it was built out of. Stored as it is, a
+        /// state would carry a chain back through every state before it. Enumerating it once,
+        /// here, ends the chain.
+        /// </para>
+        /// <para>
+        /// This is not a place to reject anything. A value that does not satisfy the schema is
+        /// <see cref="Validate"/>'s business, and returning something the schema disallows
+        /// would only move the fault somewhere harder to read.
+        /// </para>
+        /// </remarks>
+        public virtual RuleValue Normalize(RuleValue value) => value;
     }
 }
