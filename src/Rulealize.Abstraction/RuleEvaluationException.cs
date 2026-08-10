@@ -14,6 +14,12 @@ namespace Rulealize.Abstraction
     /// matching case and no default.
     /// </para>
     /// <para>
+    /// Also raised when an input's effects commit a state that does not satisfy
+    /// <c>state.schema</c>. That is the same category of fault seen from one level up — the
+    /// values were only assembled at evaluation, so nothing about the document could have
+    /// predicted them — and the origin names the effects responsible.
+    /// </para>
+    /// <para>
     /// Note what is deliberately <em>not</em> here. Reading past the end of a sequence and
     /// reading a coordinate off the board are not errors — they produce null. Only writes
     /// are strict, because an out-of-range write has no meaningful behaviour other than
