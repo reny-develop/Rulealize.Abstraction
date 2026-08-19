@@ -146,6 +146,26 @@ iterates over a large domain should check `context.CancellationToken`.
 throw context.Error("values", "must not be empty.");
 ```
 
+### What a factory may ask for
+
+| | |
+| --- | --- |
+| `RequireExpression` / `OptionalExpression` | a child expression; the optional form gives `null` when the property is absent |
+| `RequireExpressionArray` | child expressions in document order, which is significant |
+| `RequireEffect` | a child effect |
+| `RequireSchema` | a child schema — how a schema node takes the type of what it contains |
+| `RequireString` / `OptionalString` / `RequireStringArray` | literal text |
+| `RequireInt32` / `OptionalInt32` / `OptionalBoolean` | a literal number or boolean |
+| `Node` / `TryGetProperty` / `GetRequiredProperty` | the JSON itself, for a shape the helpers do not fit |
+| `BuildExpression` / `BuildEffect` / `BuildSchema` | build a child out of JSON found that way, with a label for diagnostics |
+| `State` / `Scope` / `Definitions` | resolve a state path, a local name, a definition |
+| `Error(message)` / `Error(property, message)` | a build error located at the node or at one of its properties |
+
+**The literal helpers refuse an expression**, and that refusal is the point. A board's width,
+the members of an enumeration, the name a sequence binds its element to — these are facts
+about the document rather than about a position, and asking for them as literals is what
+lets them be checked once, before any position exists.
+
 ### Bindings
 
 A node that introduces a local name declares it while building, and reads it back through a
@@ -193,9 +213,67 @@ lives here:
 ExpressionNode target = context.RequireExpression("target");
 if (target is not IStateLocation location)
 {
-    throw context.Error("target", "must denote a state field.");
+    throw context.Error("target", "must denote a state field, such as \"$board\".");
+}
+
+if (location.Path.Schema is not BoardSchemaNode)
+{
+    throw context.Error("target", $"'{location.Path}' is not a board.");
 }
 ```
+
+The second check is the one worth remembering. `StatePath` carries the schema of the field it
+resolved to, so an effect can establish at build time that it was pointed at the sort of
+field it knows how to write — and a rule set that aims a board effect at a counter is told so
+before any position exists, rather than faulting on the transition that reaches it.
+
+### Schemas
+
+A schema node says what one state field holds. It is never evaluated — there is no
+`Evaluate` and no `IEvaluationContext` anywhere in one — and what it owns instead is the
+JSON its values are written as. That is the seam that keeps the state plugin from knowing
+what a board is: `state` moves the value in and out of a field, and the schema node decides
+that a board is written as a sparse object keyed by coordinate.
+
+| | |
+| --- | --- |
+| `IsNullable` | whether `Null` is a legal value for a field of this schema |
+| `Validate(value, sink)` | check a value already in hand |
+| `ReadJson(element, sink)` | a state document arriving |
+| `WriteJson(writer, value)` | a state document leaving. What it writes is what `ReadJson` will be handed back |
+| `Normalize(value)` | optional. Settle what an effect wrote, before it is stored |
+
+**Validation reports rather than throws.** `Validate` and `ReadJson` are both handed an
+`ISchemaValidationSink` so that one pass can name every violation; stopping at the first
+would make a malformed state document take as many runs to fix as it has mistakes.
+`ReadJson` reports and returns a best-effort value rather than throwing, for the same reason
+one level up: the runtime checks the sink afterwards, and one bad field should not hide the
+next.
+
+**A schema may contain a schema.** `context.RequireSchema("cell")` gives a schema node its
+element type without either one knowing what the other is, which is what lets a grid plugin
+hold cells it has never heard of. The containing node has to place what the contained one
+reports, though — a cell schema reports its violations unqualified, and only the board knows
+which square was being read — so wrap the sink:
+
+```csharp
+internal sealed class ElementSink(ISchemaValidationSink inner, string where) : ISchemaValidationSink
+{
+    public bool HasViolations => inner.HasViolations;
+
+    public void Violation(string message) => inner.Violation(where, message);
+
+    public void Violation(string relativePath, string message) =>
+        inner.Violation($"{where}/{relativePath}", message);
+}
+```
+
+**`Normalize` is the member most schemas do not need**, and the one kind that always does is
+a sequence. The value model lets one be lazy over the state it was built from, so storing it
+as it arrived would leave each state holding a way to recompute itself from the state before
+it, and the chain would grow with every transition. Enumerating it here ends the chain at
+one. It is not a place to reject anything: that is `Validate`'s business, and the runtime
+checks the value against the schema after normalizing it.
 
 ### Shorthand
 
