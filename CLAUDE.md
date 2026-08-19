@@ -12,4 +12,4 @@ Plural is used only where it carries meaning the singular does not — chiefly a
 
 The default is singular rather than plural because words like `Building` and `Evaluation` have no plural form, so a repository can only ever be consistent in the singular direction. Deciding once removes the per-folder question of whether the name describes a container or its contents.
 
-Namespaces here are public API. Renaming one is a breaking change for every consumer — the runtime and all twelve plugin repositories — so it belongs with a package version bump, not on its own.
+Namespaces here are public API. Renaming one is a breaking change for every consumer — the runtime and every plugin repository — so it belongs with a package version bump, not on its own.

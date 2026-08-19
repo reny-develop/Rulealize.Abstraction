@@ -19,7 +19,7 @@ namespace Rulealize.Abstraction.Building
     /// A definition body is built in a fresh, empty scope. It can see the state and other
     /// definitions, and its own parameters, and nothing from wherever it happens to be
     /// called. Arguments are the only channel in. That keeps a definition's meaning fixed
-    /// no matter where it is used: Othello's flip helper takes its direction as a
+    /// no matter where it is used: Reversi's flip helper takes its direction as a
     /// parameter, and is unaffected by the fact that its caller's loop variable happens to
     /// share a name.
     /// </para>

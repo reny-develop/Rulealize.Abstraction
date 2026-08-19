@@ -13,11 +13,11 @@ account every plugin specification cites — is in [`doc/`](doc/):
 | | |
 | --- | --- |
 | [The value model, and the three kinds of node](doc/value-model.md) | the kinds of value, equality, null propagation, scope, string sugar, and what applying effects means |
-| [How a plugin specification is written](doc/specification-notation.md) | the notation the twelve standard vocabularies document themselves in |
+| [How a plugin specification is written](doc/specification-notation.md) | the notation every plugin specification documents itself in |
 
 Those two live here rather than in the runtime because they describe types this package
-defines, and because the specifications that cite them ship from twelve separate
-repositories, none of which may reference the runtime.
+defines, and because the specifications that cite them ship from separate repositories,
+none of which may reference the runtime.
 
 ## The three kinds of node
 
@@ -26,7 +26,7 @@ kind decides where in a rule set document it may appear.
 
 | Kind | Produces | Appears in |
 | --- | --- | --- |
-| `ExpressionNode` | a value | guards, effect arguments, definition bodies, input parameter domains, the terminal section |
+| `ExpressionNode` | a value | guards, effect arguments, definition bodies, input parameter domains, the actor an input names, the terminal section |
 | `EffectNode` | a write to the state | elements of an input's `effects` array |
 | `SchemaNode` | the type of a state field | `state.schema` |
 

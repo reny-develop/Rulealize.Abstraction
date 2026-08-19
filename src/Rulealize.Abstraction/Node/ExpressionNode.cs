@@ -12,7 +12,7 @@ namespace Rulealize.Abstraction.Node
     /// <remarks>
     /// <para>
     /// Expression nodes appear in guards, in effect arguments, in definition bodies, in
-    /// input parameter domains, and in the terminal section.
+    /// input parameter domains, in the actor an input names, and in the terminal section.
     /// </para>
     /// <para>
     /// <b>Evaluation must be pure.</b> The same node evaluated against the same state

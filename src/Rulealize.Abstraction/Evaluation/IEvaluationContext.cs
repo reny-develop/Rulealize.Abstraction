@@ -61,7 +61,7 @@ namespace Rulealize.Abstraction.Evaluation
         /// The body runs in a fresh frame holding only these arguments; it cannot see the
         /// caller's locals. Because bodies are pure, the runtime may return a memoized
         /// result for the same definition, arguments, and snapshot — which is what keeps
-        /// Othello's flip computation from being repeated between a guard and the effect
+        /// Reversi's flip computation from being repeated between a guard and the effect
         /// that follows it.
         /// </remarks>
         RuleValue Invoke(DefinitionDescriptor definition, ReadOnlySpan<RuleValue> arguments);

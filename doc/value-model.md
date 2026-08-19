@@ -19,7 +19,7 @@ in [the README](../README.md). The notation the plugin specifications are writte
 | Kind | What it is | As a JSON literal |
 | --- | --- | --- |
 | `Null` | the absence of a value | `null` |
-| `Bool` | a truth value | `true` / `false` |
+| `Boolean` | a truth value | `true` / `false` |
 | `Number` | a number; integers and fractions are not distinguished | `42`, `1.5` |
 | `Text` | a string | `"black"` |
 | `Sequence` | a finite ordered run of values | (none) |
@@ -107,7 +107,7 @@ A plugin provides three kinds of node. One plugin may provide more than one kind
 
 | Kind | What it does | Where it may appear |
 | --- | --- | --- |
-| **expression** | evaluates to a value; pure | `when`, the arguments of `effects`, the body of a `definitions` entry, `params[].domain`, `terminal` |
+| **expression** | evaluates to a value; pure | `when`, `actor`, the arguments of `effects`, the body of a `definitions` entry, `params[].domain`, `terminal` |
 | **effect** | describes a write to the state draft | only as an element of `inputs.*.effects` |
 | **schema** | describes the type of a state field | only inside `state.schema` |
 
@@ -123,7 +123,7 @@ fourth kind of node. `GetValidInputs` enumerates it to form candidates.
 resolves each argument against its domain too, and refuses a value the domain does not
 produce. A rule set may therefore state a rule in a domain or in `when` as it prefers, and
 one that moves work into a domain to keep the candidate count down does not owe a second
-copy of that rule in the guard. (→ [what chess made of this, §3.2](https://github.com/reny-develop/Rulealize/blob/main/doc/dsl-example-chess.md))
+copy of that rule in the guard.
 
 What gets bound is **the value the domain produced**. An argument arrives from a document
 as JSON, so an opaque value arrives as text, and it is replaced by the value it matched
@@ -190,10 +190,10 @@ nodes of its own. The core does not know sugar exists.
 Colliding prefixes are detected when plugins are loaded.
 
 **There is no way to write a literal string that begins with a reserved character**, and
-none is provided. Nothing in five rule sets has needed one, and the hole is narrower than
-it looks: only a literal in the rule set document is expanded, so text arriving in a state
-document, a key in `branch.match`'s `cases`, and any value computed at run time are all
-unaffected. If a rule set does need one, the answer is for the plugin that reserved the
-character to unescape a doubled one (`$$x` meaning `$x`) rather than for a new node or a
-new plugin to appear — the character is that plugin's to spend, and the core still gets to
-know nothing about any of it.
+none is provided. Nothing in the rule sets written so far has needed one, and the hole is
+narrower than it looks: only a literal in the rule set document is expanded, so text
+arriving in a state document, a key in `branch.match`'s `cases`, and any value computed at
+run time are all unaffected. If a rule set does need one, the answer is for the plugin that
+reserved the character to unescape a doubled one (`$$x` meaning `$x`) rather than for a new
+node or a new plugin to appear — the character is that plugin's to spend, and the core still
+gets to know nothing about any of it.

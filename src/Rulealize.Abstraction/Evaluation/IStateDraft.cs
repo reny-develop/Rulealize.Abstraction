@@ -18,7 +18,7 @@ namespace Rulealize.Abstraction.Evaluation
     /// </para>
     /// <para>
     /// That read-modify-write is how two effects can both edit one board and have their
-    /// changes add up. In Othello, placing a stone and flipping the captured ones are two
+    /// changes add up. In Reversi, placing a stone and flipping the captured ones are two
     /// separate effects that each rewrite the board field; because the second reads the
     /// draft, it starts from a board that already has the new stone on it. Meanwhile the
     /// expressions inside both effects still read the untouched snapshot, so the set of

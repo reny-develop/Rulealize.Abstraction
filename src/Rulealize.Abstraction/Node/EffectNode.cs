@@ -20,7 +20,7 @@ namespace Rulealize.Abstraction.Node
     /// the draft and are committed together once all effects have run.
     /// </para>
     /// <para>
-    /// This is what lets Othello's <c>place</c> be written in the order a person would
+    /// This is what lets Reversi's <c>place</c> be written in the order a person would
     /// describe it: put the stone down, then flip what it captured. Under sequential
     /// semantics the flip computation would rescan a board that already had the new stone
     /// on it, and the rule author would have to hoist the computation into a

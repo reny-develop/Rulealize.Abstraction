@@ -12,7 +12,7 @@ namespace Rulealize.Abstraction.Value
     /// <para>
     /// <b>A sequence must be re-enumerable.</b> Enumerating the same sequence value twice
     /// must yield the same elements. Lazy evaluation is allowed; a single-use iterator is
-    /// not. A rule may bind a sequence once and consume it from two places — Othello's
+    /// not. A rule may bind a sequence once and consume it from two places — Reversi's
     /// flip detection binds a ray, walks it with <c>seq.takeWhile</c>, then indexes into it
     /// with <c>seq.elementAt</c> — and a single-use implementation would silently return
     /// nothing on the second pass.
