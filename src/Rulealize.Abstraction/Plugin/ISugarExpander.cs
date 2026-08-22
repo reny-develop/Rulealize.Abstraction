@@ -30,12 +30,21 @@ namespace Rulealize.Abstraction.Plugin
     /// Sugar applies in expression position only. A string that does not begin with a
     /// reserved character is an ordinary text value.
     /// </para>
+    /// <para>
+    /// A character is not reserved to the exclusion of other plugins. Where more than one
+    /// has reserved it, a rule set says which vocabulary it meant by writing that namespace
+    /// between the character and a colon — <c>"$state:board"</c> — and an expander is handed
+    /// the bare form either way, so nothing below has to know a qualifier was written.
+    /// </para>
     /// </remarks>
     public interface ISugarExpander
     {
         /// <summary>Expands a string literal into a node.</summary>
         /// <param name="context">The surrounding build state.</param>
-        /// <param name="text">The literal, including the reserved prefix character.</param>
+        /// <param name="text">
+        /// The literal, including the reserved prefix character and without the namespace
+        /// qualifier, if one was written.
+        /// </param>
         /// <returns>The node.</returns>
         /// <exception cref="RuleSetBuildException">The text is not a valid shorthand.</exception>
         ExpressionNode Expand(IBuildContext context, string text);
