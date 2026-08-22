@@ -65,5 +65,54 @@ namespace Rulealize.Abstraction.Evaluation
         /// that follows it.
         /// </remarks>
         RuleValue Invoke(DefinitionDescriptor definition, ReadOnlySpan<RuleValue> arguments);
+
+        /// <summary>Resolves one chance event by taking a candidate from the runtime.</summary>
+        /// <param name="candidates">
+        /// Everything that could come out, with a relative weight each. Must not be empty,
+        /// and at least one weight must be positive.
+        /// </param>
+        /// <param name="origin">
+        /// Where the candidates came from, for a fault message — for example
+        /// <c>"chance.pick.of"</c>.
+        /// </param>
+        /// <returns>The candidate this evaluation is being run for.</returns>
+        /// <exception cref="RuleEvaluationException">
+        /// There is nothing to draw from, a weight is negative, or the runtime does not
+        /// resolve draws at all.
+        /// </exception>
+        /// <remarks>
+        /// <para>
+        /// <b>The runtime chooses, not the plugin.</b> A draw node works out what could come
+        /// out and how likely each of those is, and hands the list over; which one comes back
+        /// belongs to whoever is enumerating the alternatives, because that is the same
+        /// party that has to report where each one leads. Evaluating the same node again for
+        /// a different outcome hands it a different candidate, and that is the one and only
+        /// way a node's value is not a function of the snapshot alone.
+        /// </para>
+        /// <para>
+        /// <b>A plugin must not generate the choice itself.</b> Nothing here reads a clock or
+        /// a random number generator. An operation that did would answer differently for each
+        /// candidate <c>GetValidInputs</c> tries, would falsify the memoization definitions
+        /// rely on, and would make applying a recorded input produce a state other than the
+        /// one it was recorded against. Where the randomness comes from is a question for the
+        /// caller, above the runtime, and it does not reach down here.
+        /// </para>
+        /// <para>
+        /// <b>Nothing to draw from is a fault.</b> Not a null, and not an outcome that simply
+        /// does not exist: a legal input has at least one thing that can happen to it, and a
+        /// rule set that reaches an empty deck is one whose guard forgot to say the deck is
+        /// not empty. Reporting it here rather than swallowing it is what keeps that
+        /// guarantee worth relying on.
+        /// </para>
+        /// <para>
+        /// The default implementation throws. A draw is a capability, and a runtime built
+        /// before there were any does not have it; the failure says so rather than producing
+        /// an answer nobody enumerated.
+        /// </para>
+        /// </remarks>
+        RuleValue Draw(ReadOnlySpan<DrawCandidate> candidates, string origin) =>
+            throw new RuleEvaluationException(
+                origin ?? nameof(Draw),
+                "This is a draw, and this runtime does not resolve draws.");
     }
 }

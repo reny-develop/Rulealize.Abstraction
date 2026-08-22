@@ -130,6 +130,33 @@ as JSON, so an opaque value arrives as text, and it is replaced by the value it 
 before anything evaluates. The candidate `GetValidInputs` offered and the move applied
 from a document put exactly the same value in front of every expression downstream.
 
+### 4.2 A draw is an expression node placed differently
+
+An operation registered with `AddDraw` resolves something nobody chose — a card off a deck,
+a face of a die. What it builds is an expression node, and for the same reason a domain is
+not a fourth kind: it produces a value, and it is written where a value belongs.
+
+What `AddDraw` settles is placement, and it is narrower than the table above in one
+direction only.
+
+| | |
+| --- | --- |
+| may appear | anywhere inside `inputs.*.effects`, at any depth |
+| refused in | `when`, `actor`, `params[].domain`, `terminal`, the body of a `definitions` entry |
+
+Every one of those refusals is a position the runtime evaluates while it is sifting
+candidates or while it is memoizing a result, and both of those rest on the word *pure*
+above. A draw is the one node whose value is not settled by the snapshot alone — it is
+settled by **which of the possible outcomes this evaluation is for**, which is the
+runtime's to say and never the node's.
+
+So the purity rule stands and gains a clause: **a draw is pure given its outcome.**
+Evaluated twice for the same outcome it produces the same value. The node works out what
+could come out and how likely each of those is and asks for one with
+`IEvaluationContext.Draw`; it does not read a clock and it does not roll anything. That is
+what makes a recorded input replay to the state it was recorded against, and it is why the
+alternatives can be enumerated at all.
+
 
 ## 5. What applying effects means
 

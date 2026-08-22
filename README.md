@@ -36,6 +36,34 @@ expression and finding an effect is a `RuleSetBuildException`.
 One plugin may provide several kinds. A grid plugin typically provides all three: a schema
 node for the board, expressions for reading it, and effects for writing it.
 
+### Three kinds of node, four kinds of operation
+
+A **draw** is the fourth, and it is registered with `AddDraw` rather than `AddExpression`.
+It builds an `ExpressionNode` like anything else that produces a value, so the table above
+does not gain a row; what sets it apart is not what it produces but where it may be
+written.
+
+| | |
+| --- | --- |
+| Appears in | inside an input's `effects`, at any depth |
+| Refused in | a guard, a parameter domain, the actor, the terminal section, a definition body |
+
+The refusals are the point. Each of those positions is evaluated while candidates are being
+sifted or while a result is being memoized, and a value that is not settled by the state
+snapshot alone would make both of those untrue — `GetValidInputs` would be answering with
+one card and applying the input would deal another.
+
+A draw does not choose. It works out what could come out and how likely each of those is,
+and asks the runtime for one with `IEvaluationContext.Draw`. Whoever enumerates the
+alternatives is the one that decides which of them this evaluation is for, and that is the
+only place in the whole contract where evaluating the same node twice may legitimately
+differ. **A plugin that reads a clock or a random number generator instead is not
+implementing this**; it is breaking the purity requirement above, and the failure shows up
+as a recorded input replaying to a state it never produced.
+
+Both members carry a default implementation that refuses, because resolving a draw is a
+capability rather than a given. A runtime without it says so when the plugin is loaded.
+
 ## Build time and evaluation time
 
 The split matters more than it might look, because `GetValidInputs` evaluates a guard

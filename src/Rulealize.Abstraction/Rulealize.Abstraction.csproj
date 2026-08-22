@@ -19,7 +19,7 @@
 
   <PropertyGroup>
     <PackageId>Rulealize.Abstraction</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
     <Authors>Reny</Authors>
     <Description>The library referenced by Rulealize and its plugin projects.</Description>
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
