@@ -71,8 +71,9 @@ namespace Rulealize.Abstraction.Plugin
 
         /// <summary>Gets the character this plugin claims for string sugar, if any.</summary>
         /// <remarks>
-        /// The runtime rejects a plugin set in which two plugins claim the same character,
-        /// at load time.
+        /// Not claimed to the exclusion of anybody: two plugins may reserve one character
+        /// and load together. A rule set that writes the bare form where both are present
+        /// is asked which vocabulary it meant, by name — see <see cref="ISugarExpander"/>.
         /// </remarks>
         public char? ReservedPrefix { get; }
 
