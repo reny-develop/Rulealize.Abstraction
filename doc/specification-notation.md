@@ -46,7 +46,7 @@ Each operation says which of its faults is which. The division is always the sam
   position its kind does not allow, an expression where a static key belongs, a `def.call`
   whose arguments do not match the definition's parameters
 - **At evaluation (dynamic)** — a value of the wrong kind, ordering or arithmetic against
-  null, division by zero
+  null, division by zero, effects that between them commit a state `state.schema` forbids
 
 Nothing that can be settled statically is left to run time. The full division, and why it
 is drawn where it is, is under ["build time and evaluation time"](../README.md) in the
@@ -58,6 +58,9 @@ Each opens with a table. It carries the plugin's manifest — an identifier, a v
 namespace it provides, and the prefix it reserves, if any — and then, as links, what the
 specification depends on and the notation it is written in.
 
-A second plugin claiming a taken identifier, a taken namespace or a taken prefix is
-refused when plugins load, so those three are the plugin's whole claim on the shared name
-space. The version is what a rule set's `requires` is read against.
+A second plugin claiming a taken identifier or a taken namespace is refused when plugins
+load, and the identifier and the namespace are between them the plugin's whole claim on the
+shared name space. The reserved prefix is not part of that claim: more than one plugin may
+reserve a character, and a rule set that would otherwise be ambiguous names the vocabulary
+it meant — see [string sugar](value-model.md). The version is what a rule set's `requires`
+is read against.

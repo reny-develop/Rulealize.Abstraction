@@ -12,9 +12,10 @@ namespace Rulealize.Abstraction.Plugin
     /// <remarks>
     /// <para>
     /// The shorthands that make a rule set readable — <c>"$board"</c> for a state field,
-    /// <c>"@at"</c> for a local, <c>"#opponent"</c> for a definition — are not known to the
-    /// core. Each is registered by the plugin that owns the corresponding operation, so the
-    /// core never learns that the shorthands exist.
+    /// <c>"@at"</c> for a local, <c>"#opponent"</c> for a definition — mean nothing to the
+    /// core. Each is registered by the plugin that owns the corresponding operation, and
+    /// what the core knows is only the shape: a leading character somebody reserved, and a
+    /// namespace after it where one was written.
     /// </para>
     /// <para>
     /// An expander receives the text with its prefix still attached, and returns the same

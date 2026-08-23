@@ -62,7 +62,10 @@ implementing this**; it is breaking the purity requirement above, and the failur
 as a recorded input replaying to a state it never produced.
 
 Both members carry a default implementation that refuses, because resolving a draw is a
-capability rather than a given. A runtime without it says so when the plugin is loaded.
+capability rather than a given. `AddDraw` refuses while the plugin is being loaded, which is
+where a runtime that has no draws at all turns one away; `IEvaluationContext.Draw` refuses
+at evaluation, for the runtime that registered the operation and then found itself with
+nothing to resolve it.
 
 ## Build time and evaluation time
 
@@ -84,6 +87,8 @@ Left to evaluation time, as `RuleEvaluationException`:
 
 - a value of the wrong kind, an ordering comparison against null, division by zero
 - a `match` with no matching case and no default
+- an input whose effects commit a state the schema forbids, reported at the transition that
+  assembled it rather than at the read that would later trip over it
 
 Note what is deliberately absent from the second list. Reading past the end of a sequence,
 or reading a coordinate that is off the board, is not an error — it yields null. Writes are
@@ -307,9 +312,15 @@ checks the value against the schema after normalizing it.
 
 A plugin may claim one character in its manifest and register an `ISugarExpander` for it.
 The expander turns a string literal beginning with that character into the same node the
-long form would have produced. The core never learns the shorthand exists; the loader
-rejects two plugins claiming the same character. Sugar applies in expression position only —
-a string that does not begin with a reserved character is an ordinary text value.
+long form would have produced, and the core never learns what the shorthand means. Sugar
+applies in expression position only — a string that does not begin with a reserved
+character is an ordinary text value.
+
+The character is not claimed to anyone's exclusion. Two plugins may reserve one and load
+together, and a rule set that would otherwise be ambiguous names the vocabulary it meant
+between the character and a colon — `"$state:board"`. That qualifier is the one part of the
+shape the core does read, and it strips it: an expander is handed `"$board"` either way, so
+nothing implementing one has to know a qualifier exists.
 
 ## Layout
 
@@ -319,7 +330,7 @@ a string that does not begin with a reserved character is an ordinary text value
 | `Rulealize.Abstraction.Value` | the value model |
 | `Rulealize.Abstraction.Node` | `ExpressionNode`, `EffectNode`, `SchemaNode`, `IStateLocation`, `ISchemaValidationSink` |
 | `Rulealize.Abstraction.Building` | build contexts, scopes, resolved handles, factory delegates |
-| `Rulealize.Abstraction.Evaluation` | `IEvaluationContext`, `IStateDraft` |
+| `Rulealize.Abstraction.Evaluation` | `IEvaluationContext`, `IStateDraft`, `DrawCandidate` |
 | `Rulealize.Abstraction.Plugin` | `IRulealizePlugin`, `PluginManifest`, `IPluginRegistry`, `ISugarExpander` |
 
 ## License
