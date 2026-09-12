@@ -9,14 +9,18 @@ Assumed throughout: [the value model, and the three kinds of node](value-model.m
 ## The notation used in a node's "form"
 
 An operation's form shows the JSON that names the node, with every value replaced by what
-may stand there. It is a `jsonc` block under a **Form** heading, or a cell in the summary
-table where a plugin's operations are short enough to fit on one line.
+may stand there. It is a `jsonc` block — under a **Form** heading, or directly under the
+heading of the section that introduces the operation — or a cell in the summary table where
+a plugin's operations are short enough to fit on one line. Which of the three carries no
+meaning: a form names its own `op`, so it is read by what is in it rather than by what
+stands above it.
 
 | Written | Means |
 | --- | --- |
 | `<expression>` | any expression node, or a JSON literal evaluated as one |
 | `<expression:Kind>` | the value has to be of that kind. Capitalized, and spelled as the value model spells it: `Boolean`, `Number`, `Text`, `Sequence`, `Record` |
 | `<expression:tag>` | the value has to be an opaque value carrying that type tag. Lowercase is what tells it apart from a kind, and the plugin's own namespace is left off — `<expression:coord>` in the Grid specification means the tag `grid/coord` |
+| `<state field>` | an expression that has to denote a state field, written `"$name"`, and resolved at `CreateContext` rather than evaluated. `<state field:Kind>` and `<state field:tag>` narrow what the field holds, exactly as the two rows above narrow an expression |
 | `<schema node>` | a schema node. Abbreviated `<schema>` where a form is written on one line |
 | `<integer>`, `<boolean>` | a JSON literal of that type, never an expression |
 | `"<name>"`, `"<path>"`, `"<key>"`, and the like | a literal string, in the role the placeholder names |
@@ -27,13 +31,14 @@ example, `{ "op": "seq.any", ... }` means keys were left out because they are no
 example is about. A form never elides anything, so the two never have to be told apart by
 context.
 
-Two words carry meaning in a trailing comment, and a key with neither is required and takes
-an expression:
+Three notes carry meaning in a trailing comment, and a key carrying none of them is required
+and takes an expression:
 
 | In the comment | Means |
 | --- | --- |
 | `static` | the key takes a literal rather than an expression, and is read at `CreateContext` |
 | `optional` | the key may be omitted, and the prose says what omitting it means |
+| `required with "<key>"` | the key may be omitted only while that other key is, and writing it alone is a build error |
 
 The comment is free to name the key it is about — `// static`, `// path is static` and
 `// the keys are static` all say the same thing.
