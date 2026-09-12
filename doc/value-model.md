@@ -206,7 +206,8 @@ definition's meaning independently of where it is called from.
 ## 7. String sugar
 
 A plugin may reserve a leading character and expand string literals that begin with it into
-nodes of its own. The core does not know sugar exists.
+nodes of its own. What the core knows is the shape — a leading character somebody reserved,
+and a namespace after it where one was written — and never what any of it means.
 
 | Prefix | Reserved by | Expands to |
 | --- | --- | --- |
@@ -214,7 +215,20 @@ nodes of its own. The core does not know sugar exists.
 | `@` | `Rulealize.Plugin.Binding` | `{ "op": "bind.local", "name": "…" }` |
 | `#` | `Rulealize.Plugin.Definition` | `{ "op": "def.ref", "name": "…" }` |
 
-Colliding prefixes are detected when plugins are loaded.
+That table says who is using each character today, not who owns it. **A character is
+nobody's alone.** Two plugins may reserve one and load together, and where both are present
+a rule set says which vocabulary it meant by writing that namespace between the character
+and a colon.
+
+| Written | Read as |
+| --- | --- |
+| `"$board"` | the plugin that reserved `$`, where only one did |
+| `"$state:board"` | `Rulealize.Plugin.State`, whoever else reserved `$` |
+
+The expander is handed the bare form — `"$board"` — either way, so a plugin that owns a
+shorthand never has to know a qualifier exists, and the long form it expands to is the same
+one. Writing the bare form where more than one plugin has reserved the character is a build
+error, and it names the vocabularies it could have meant.
 
 **There is no way to write a literal string that begins with a reserved character**, and
 none is provided. Nothing in the rule sets written so far has needed one, and the hole is
@@ -222,5 +236,5 @@ narrower than it looks: only a literal in the rule set document is expanded, so 
 arriving in a state document, a key in `branch.match`'s `cases`, and any value computed at
 run time are all unaffected. If a rule set does need one, the answer is for the plugin that
 reserved the character to unescape a doubled one (`$$x` meaning `$x`) rather than for a new
-node or a new plugin to appear — the character is that plugin's to spend, and the core still
-gets to know nothing about any of it.
+node or a new plugin to appear — the character is spent by whoever reserved it, and the core
+still gets to know nothing about what any of it means.
