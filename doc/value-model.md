@@ -35,7 +35,7 @@ Holds what belongs to one plugin and means nothing to the core — a coordinate,
 direction. An opaque value carries a **type tag** such as `grid/coord`, and two opaque
 values with different tags are never equal.
 
-**An opaque value that can appear in `inputs.*.params` must have a canonical text form.**
+**An opaque value a parameter's `domain` can produce must have a canonical text form.**
 Two reasons, and they are the two directions of one trip.
 
 - The `args` in what `GetValidInputs` returns leave as a JSON document (`{ "at": "d3" }`).
@@ -46,6 +46,11 @@ Two reasons, and they are the two directions of one trip.
 So a node that accepts an opaque value **accepts both the opaque value itself and the text
 that is its canonical form** — see "what a coordinate may be written as" in each plugin's
 specification.
+
+The trip is what imposes it, so a parameter declared `open` (§4.3) imposes nothing: its
+value arrives once, read by the schema node from the JSON, and is never written back out as
+an argument. A value that can only be read is free of the first direction and of the
+requirement with it.
 
 **A value that only ever lives inside the state carries no such requirement.** A board is
 the example: serializing it belongs to the schema node (`grid.board`), so the value itself
@@ -109,7 +114,7 @@ A plugin provides three kinds of node. One plugin may provide more than one kind
 | --- | --- | --- |
 | **expression** | evaluates to a value; pure | `when`, `actor`, the arguments of `effects`, the body of a `definitions` entry, `params[].domain`, `terminal` |
 | **effect** | describes a write to the state draft | only as an element of `inputs.*.effects` |
-| **schema** | describes the type of a state field | only inside `state.schema` |
+| **schema** | describes the type of a state field | `state.schema`, and `params[].open` |
 
 A node in a position its kind does not allow is a build error, raised while the rule set is
 compiled (`CreateContext`), never at run time.
@@ -157,6 +162,29 @@ could come out and how likely each of those is and asks for one with
 what makes a recorded input replay to the state it was recorded against, and it is why the
 alternatives can be enumerated at all.
 
+
+### 4.3 An open parameter is a schema node
+
+Where an input takes a value nothing in the rule set produced — text somebody typed — there
+is no sequence to enumerate, and `params[].open` holds a **schema node** in place of a
+domain. It is the same vocabulary `state.schema` is written in, in a second position, and it
+is there because it already answers the question a domain answers by enumerating: whether a
+value is admissible (`SchemaNode.Validate`), and what value the JSON for it denotes
+(`SchemaNode.ReadJson`). A parameter open to text therefore accepts exactly what a field of
+that schema accepts, read exactly the same way.
+
+`SchemaNode.Describe` serves the other side of it: it hands a host the bounds it needs to
+offer an editor, so a limit is stated in the schema rather than restated in every screen that
+edits it. Nothing interprets the record on the way through, and a host reads it against the
+`op` the schema was written as.
+
+A parameter admitting what the field it is edited into forbids would be refused at the
+transition that committed it — after the input had been accepted, which is the worst moment to
+raise one. Rather than check for that, the document is given no way to say it: `open` may be
+written as `{ "field": "<name>" }`, and the parameter then **is** that field's schema node
+rather than a second declaration of its bounds. One statement, so nothing to compare and
+nothing to drift. A schema node written out instead claims no field, and a value that
+overflows where it ends up is caught on commit like any other computed one.
 
 ## 5. What applying effects means
 

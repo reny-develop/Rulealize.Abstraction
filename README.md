@@ -28,7 +28,7 @@ kind decides where in a rule set document it may appear.
 | --- | --- | --- |
 | `ExpressionNode` | a value | guards, effect arguments, definition bodies, input parameter domains, the actor an input names, the terminal section |
 | `EffectNode` | a write to the state | elements of an input's `effects` array |
-| `SchemaNode` | the type of a state field | `state.schema` |
+| `SchemaNode` | the type of a state field | `state.schema`, `params[].open` |
 
 Placement is enforced while the rule set is built, not when it runs. Asking for an
 expression and finding an effect is a `RuleSetBuildException`.
@@ -275,6 +275,7 @@ that a board is written as a sparse object keyed by coordinate.
 | `ReadJson(element, sink)` | a state document arriving |
 | `WriteJson(writer, value)` | a state document leaving. What it writes is what `ReadJson` will be handed back |
 | `Normalize(value)` | optional. Settle what an effect wrote, before it is stored |
+| `Describe()` | optional. The bounds, as a record a host can read |
 
 **Validation reports rather than throws.** `Validate` and `ReadJson` are both handed an
 `ISchemaValidationSink` so that one pass can name every violation; stopping at the first
@@ -300,6 +301,19 @@ internal sealed class ElementSink(ISchemaValidationSink inner, string where) : I
         inner.Violation($"{where}/{relativePath}", message);
 }
 ```
+
+**`Describe` is for the second position a schema node appears in.** A parameter may be
+`open` rather than given a domain, which is how an input takes a value nothing in the rule set
+produced — text somebody typed — and what stands there is a schema node, because admitting a
+value is what one already does.
+
+`Describe` returns the bounds as a record so that a host can build an editor from them
+instead of restating them; nothing interprets it on the way through, and a host reads it
+against the `op` the rule set wrote. Presentation is not a bound and does not go in it.
+
+A parameter edited into a state field is written `{ "field": "<name>" }` and uses that
+field's schema node itself, so a parameter and its field cannot disagree about what is
+admissible — there is one declaration rather than two agreeing ones.
 
 **`Normalize` is the member most schemas do not need**, and the one kind that always does is
 a sequence. The value model lets one be lazy over the state it was built from, so storing it

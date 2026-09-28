@@ -67,6 +67,14 @@ namespace Rulealize.Abstraction.Building
         /// <param name="slot">Receives the slot when the name is in scope.</param>
         /// <returns><see langword="true"/> when the name is in scope.</returns>
         /// <remarks>The innermost declaration wins.</remarks>
+        /// <exception cref="RuleSetBuildException">
+        /// The name is in scope but unreadable where it is being read. An input's parameter
+        /// may be declared <c>open</c>, meaning its value comes from outside and does not
+        /// exist while candidates are being formed; the positions evaluated then — a guard,
+        /// an actor, a fired input's arguments — are refused it. Reporting that here rather
+        /// than answering <see langword="false"/> is what makes the message name the
+        /// parameter instead of calling it undeclared.
+        /// </exception>
         bool TryResolve(string name, out LocalSlot slot);
     }
 }
