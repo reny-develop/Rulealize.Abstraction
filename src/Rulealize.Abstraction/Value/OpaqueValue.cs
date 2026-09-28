@@ -13,12 +13,17 @@ namespace Rulealize.Abstraction.Value
     /// inside. This is what lets a grid plugin be replaced without the core changing.
     /// </para>
     /// <para>
-    /// A plugin whose opaque values can appear in <c>inputs.*.params</c> must override
+    /// A plugin whose opaque values a parameter's <c>domain</c> can produce must override
     /// <see cref="RuleValue.GetCanonicalText"/>. Input arguments travel out through
     /// <c>GetValidInputs</c> as JSON text and come back in through an input document, and
     /// a value with no text form cannot make that round trip. Values that only ever live
     /// inside the state — a whole board, for instance — do not need one, because they are
     /// serialized by their schema node instead.
+    /// </para>
+    /// <para>
+    /// Nor does the value of a parameter declared <c>open</c>, which makes only half the
+    /// trip: it is read from the JSON by the schema node standing in for the domain, and is
+    /// never written back out as an argument.
     /// </para>
     /// </remarks>
     public abstract class OpaqueValue : RuleValue

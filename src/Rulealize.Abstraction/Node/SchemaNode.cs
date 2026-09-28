@@ -11,7 +11,10 @@ namespace Rulealize.Abstraction.Node
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Schema nodes appear only inside <c>state.schema</c>. They are never evaluated.
+    /// Schema nodes appear inside <c>state.schema</c>, and in a parameter's <c>open</c> where
+    /// an input admits a value nothing in the rule set produced. They are never evaluated,
+    /// which is what makes the bounds one declares static — and so comparable at the moment a
+    /// document is compiled rather than only when a value turns up.
     /// </para>
     /// <para>
     /// A schema node owns the JSON representation of the values it describes. This is the
@@ -23,6 +26,9 @@ namespace Rulealize.Abstraction.Node
     /// </remarks>
     public abstract class SchemaNode
     {
+        private static readonly RecordValue NoConstraint =
+            new(new Dictionary<string, RuleValue>(StringComparer.Ordinal));
+
         /// <summary>Initializes a new instance of the <see cref="SchemaNode"/> class.</summary>
         protected SchemaNode()
         {
@@ -77,5 +83,26 @@ namespace Rulealize.Abstraction.Node
         /// </para>
         /// </remarks>
         public virtual RuleValue Normalize(RuleValue value) => value;
+
+        /// <summary>Describes what this schema admits, as data a host can read.</summary>
+        /// <returns>The constraint, keyed by name. Empty where the schema declares none.</returns>
+        /// <remarks>
+        /// <para>
+        /// A schema node owns what its values may be. A host that offers somebody an editor
+        /// for one needs the same bounds to build it — a length limit, a range — and without
+        /// this it would restate them, which is one bound kept in two places and eventually
+        /// two different bounds.
+        /// </para>
+        /// <para>
+        /// Nothing interprets the record on the way through. What a key means is this node's
+        /// business, and a host reads it against the <c>op</c> the rule set wrote, which is
+        /// the name it already knows the node by.
+        /// </para>
+        /// <para>
+        /// A constraint is what a value may be, and that is all this answers. What a field is
+        /// called, and how it is drawn, are the host's own and are not declared here.
+        /// </para>
+        /// </remarks>
+        public virtual RecordValue Describe() => NoConstraint;
     }
 }
