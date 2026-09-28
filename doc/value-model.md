@@ -112,7 +112,7 @@ A plugin provides three kinds of node. One plugin may provide more than one kind
 
 | Kind | What it does | Where it may appear |
 | --- | --- | --- |
-| **expression** | evaluates to a value; pure | `when`, `actor`, the arguments of `effects`, the body of a `definitions` entry, `params[].domain`, `terminal` |
+| **expression** | evaluates to a value; pure | `when`, `actor`, the arguments of `effects`, the body of a `definitions` entry, `params[].domain`, `projections.*`, `terminal` |
 | **effect** | describes a write to the state draft | only as an element of `inputs.*.effects` |
 | **schema** | describes the type of a state field | `state.schema`, and `params[].open` |
 
@@ -147,7 +147,7 @@ direction only.
 | | |
 | --- | --- |
 | may appear | anywhere inside `inputs.*.effects`, at any depth |
-| refused in | `when`, `actor`, `params[].domain`, `terminal`, the body of a `definitions` entry |
+| refused in | `when`, `actor`, `params[].domain`, `projections.*`, `terminal`, the body of a `definitions` entry |
 
 Every one of those refusals is a position the runtime evaluates while it is sifting
 candidates or while it is memoizing a result, and both of those rest on the word *pure*

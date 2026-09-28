@@ -43,8 +43,8 @@ namespace Rulealize.Abstraction.Plugin
         /// <para>
         /// A draw is an expression by what it produces and something else by where it may be
         /// written: inside an input's <c>effects</c> and nowhere else — not in a guard, not
-        /// in a parameter domain, not in the actor, not in the terminal section, and not in a
-        /// definition body. Each of those is evaluated while candidates are being sifted or
+        /// in a parameter domain, not in the actor, not in a projection, not in the terminal
+        /// section, and not in a definition body. Each of those is evaluated while candidates are being sifted or
         /// while a result is being memoized, and a value that is not settled by the snapshot
         /// alone would make both of those untrue. The runtime enforces the placement when the
         /// rule set is compiled, which is why registering here rather than with
