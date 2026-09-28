@@ -26,7 +26,7 @@ kind decides where in a rule set document it may appear.
 
 | Kind | Produces | Appears in |
 | --- | --- | --- |
-| `ExpressionNode` | a value | guards, effect arguments, definition bodies, input parameter domains, the actor an input names, the terminal section |
+| `ExpressionNode` | a value | guards, effect arguments, definition bodies, input parameter domains, the actor an input names, a `projections` entry, the terminal section |
 | `EffectNode` | a write to the state | elements of an input's `effects` array |
 | `SchemaNode` | the type of a state field | `state.schema`, `params[].open` |
 
@@ -46,7 +46,7 @@ written.
 | | |
 | --- | --- |
 | Appears in | inside an input's `effects`, at any depth |
-| Refused in | a guard, a parameter domain, the actor, the terminal section, a definition body |
+| Refused in | a guard, a parameter domain, the actor, a projection, the terminal section, a definition body |
 
 The refusals are the point. Each of those positions is evaluated while candidates are being
 sifted or while a result is being memoized, and a value that is not settled by the state
