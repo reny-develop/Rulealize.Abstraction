@@ -258,11 +258,15 @@ shorthand never has to know a qualifier exists, and the long form it expands to 
 one. Writing the bare form where more than one plugin has reserved the character is a build
 error, and it names the vocabularies it could have meant.
 
-**There is no way to write a literal string that begins with a reserved character**, and
-none is provided. Nothing in the rule sets written so far has needed one, and the hole is
-narrower than it looks: only a literal in the rule set document is expanded, so text
-arriving in a state document, a key in `branch.match`'s `cases`, and any value computed at
-run time are all unaffected. If a rule set does need one, the answer is for the plugin that
-reserved the character to unescape a doubled one (`$$x` meaning `$x`) rather than for a new
-node or a new plugin to appear — the character is spent by whoever reserved it, and the core
-still gets to know nothing about what any of it means.
+**Text that begins with a reserved character is written as a `literal` node** —
+`{ "op": "literal", "value": "@" }` — whose `value` is a string and is never expanded. It is
+the one operation the core reads itself, because the problem is the core's own: shorthands
+are read there, so text that only looks like one has to be writable there, once, whichever
+character it begins with and whoever reserved it. Its name is unqualified, so no plugin can
+register it, and a rule set needs nothing in `requires` to write it. Doubling the character
+(`$$x` for `$x`) was the alternative, and it was turned down because a reader has to know the
+convention to read it, and each plugin reserving a character would have to implement it.
+
+Only a literal in the rule set document is expanded in the first place, so text arriving in a
+state document, a key in `branch.match`'s `cases`, and any value computed at run time need
+none of this.
