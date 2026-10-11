@@ -29,7 +29,9 @@ namespace Rulealize.Abstraction.Plugin
     /// </code>
     /// <para>
     /// Sugar applies in expression position only. A string that does not begin with a
-    /// reserved character is an ordinary text value.
+    /// reserved character is an ordinary text value, and one that does is written as the
+    /// core's <c>{ "op": "literal", "value": "…" }</c> when it is meant as text, which no
+    /// expander is ever handed.
     /// </para>
     /// <para>
     /// A character is not reserved to the exclusion of other plugins. Where more than one

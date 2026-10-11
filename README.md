@@ -328,7 +328,8 @@ A plugin may claim one character in its manifest and register an `ISugarExpander
 The expander turns a string literal beginning with that character into the same node the
 long form would have produced, and the core never learns what the shorthand means. Sugar
 applies in expression position only — a string that does not begin with a reserved
-character is an ordinary text value.
+character is an ordinary text value, and one that does is written as the core's
+`{ "op": "literal", "value": "…" }` when it is meant as text.
 
 The character is not claimed to anyone's exclusion. Two plugins may reserve one and load
 together, and a rule set that would otherwise be ambiguous names the vocabulary it meant
